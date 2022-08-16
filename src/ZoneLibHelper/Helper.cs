@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace ZoneLib
 {
-	public class ZoneLib
+	public class Helper
 	{
 		#region ZoneLib API
 
@@ -25,7 +25,7 @@ namespace ZoneLib
 					{
 						if (dll.GetName().Name == "ZoneLib")
 						{
-							_instance = new ZoneLib(dll);
+							_instance = new Helper(dll);
 							return true;
 						}
 					}
@@ -41,22 +41,24 @@ namespace ZoneLib
 		/// <param name="id"></param>
 		/// <param name="texture"></param>
 		/// <returns>The index of the new zone type.</returns>
-		public static int CreateZone(string id, Texture2D texture)
+		public static int CreateZone(string id, Color32 color, Texture2D texture)
 		{
 			if (_instance == null) throw new InvalidOperationException("OnAllModsLoaded has not been called or ZoneLib is not enabled in the mods list.");
 
-			return _instance.createZoneDelegate(id, texture);
+			return _instance.createZoneDelegate(id, color, texture);
 		}
 
 		#endregion
 
 		#region Implementation Details
 
-		private static ZoneLib _instance;
+		private static Helper _instance;
 
 		private readonly Assembly assembly;
 
-		private ZoneLib(Assembly zoneLibAssembly)
+		private readonly Func<string, Color32, Texture2D, int> createZoneDelegate;
+
+		private Helper(Assembly zoneLibAssembly)
 		{
 			assembly = zoneLibAssembly;
 
@@ -64,10 +66,8 @@ namespace ZoneLib
 
 			object zoneMgrInstance = zoneMgr.GetProperty("Instance", BindingFlags.Public | BindingFlags.Static).GetValue(null);
 
-			createZoneDelegate = (Func<string, Texture2D, int>)zoneMgr.GetMethod("CreateZone", BindingFlags.NonPublic | BindingFlags.Instance).CreateDelegate(typeof(Func<string, Texture2D, int>), zoneMgrInstance);
+			createZoneDelegate = (Func<string, Color32, Texture2D, int>)zoneMgr.GetMethod("CreateZone", BindingFlags.NonPublic | BindingFlags.Instance).CreateDelegate(typeof(Func<string, Color32, Texture2D, int>), zoneMgrInstance);
 		}
-
-		private readonly Func<string, Texture2D, int> createZoneDelegate;
 
 		#endregion
 	}

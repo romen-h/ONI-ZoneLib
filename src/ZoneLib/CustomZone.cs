@@ -12,7 +12,7 @@ namespace ZoneLib
 	{
 		internal int Index;
 		internal string ID;
-		internal Color Color;
+		internal Color32 Color;
 		internal Texture2D Texture;
 
 		internal GroundMasks.BiomeMaskData GetBiomeMask()

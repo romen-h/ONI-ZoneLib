@@ -36,12 +36,16 @@ namespace ZoneLib
 			baseZoneCount = Enum.GetValues(typeof(SubWorld.ZoneType)).Length;
 		}
 
-		public int CreateZone(string id, Texture2D texture)
+		public int CreateZone(string id, Color32 color, Texture2D texture)
 		{
+			// TODO: Need to know which mod called this and track which mod owns each index.
+			// Detect reordering of mods to ensure saves stay compatible
+
 			CustomZone newZone = new CustomZone()
 			{
 				Index = baseZoneCount + zones.Count,
 				ID = id,
+				Color = color,
 				Texture = texture
 			};
 			zones.Add(newZone);
