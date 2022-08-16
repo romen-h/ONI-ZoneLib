@@ -62,7 +62,9 @@ namespace ZoneLib
 
 			Type zoneMgr = assembly.GetType("ZoneManager");
 
-			createZoneDelegate = (Func<string, Texture2D, int>)zoneMgr.GetMethod("CreateZone", BindingFlags.NonPublic | BindingFlags.Instance).CreateDelegate(typeof(Func<string, Texture2D, int>));
+			object zoneMgrInstance = zoneMgr.GetProperty("Instance", BindingFlags.Public | BindingFlags.Static).GetValue(null);
+
+			createZoneDelegate = (Func<string, Texture2D, int>)zoneMgr.GetMethod("CreateZone", BindingFlags.NonPublic | BindingFlags.Instance).CreateDelegate(typeof(Func<string, Texture2D, int>), zoneMgrInstance);
 		}
 
 		private readonly Func<string, Texture2D, int> createZoneDelegate;

@@ -17,6 +17,7 @@ namespace ZoneLib
 
 		internal GroundMasks.BiomeMaskData GetBiomeMask()
 		{
+			// TODO: Let the user provide a custom one or default to copying an existing one
 			return null;
 		}
 	}
